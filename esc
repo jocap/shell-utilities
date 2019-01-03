@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# courtesy of Michael Homer @ Stack Overflow
+
+printf '%s\n' "$1" | sed -e "s/'/'\"'\"'/g" -e "1s/^/'/" -e "\$s/\$/'/"

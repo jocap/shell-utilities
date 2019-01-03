@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# Note: spaces are not preserved!
+
+jot -r ${#@} \
+	| append-to $@ \
+	| sed 's/^\(.*\)[[:space:]][[:space:]]*\([^\s]*\)$/\2 \1/' \
+	| sort -n \
+	| cut -d ' ' -f 2- \
+	| xargs -L0 echo
