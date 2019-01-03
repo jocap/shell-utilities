@@ -7,6 +7,7 @@
 /* longest.c
  * -- prints the longest line in stdin, or if the two longest lines
  * -- are of equal length, the first one
+ * -- (if there are no lines in stdin, the program fails silently)
  */
 
 int main(int argc, char *argv[]) {
@@ -35,6 +36,9 @@ int main(int argc, char *argv[]) {
 	free(line);
 	if (ferror(stdin))
 		err(1, "getline");
+
+	if (longest == NULL)
+		return 1;
 
 	printf("%s", longest);
 	return 0;
