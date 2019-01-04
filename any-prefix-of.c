@@ -4,8 +4,8 @@
 #include <string.h>
 #include <err.h>
 
-/* any-begins-with.c
- * -- returns any line on stdin that begins with argv[1]
+/* any-prefix-of.c
+ * -- returns any line on stdin with which argv[1] begins
  */
 
 int main(int argc, char *argv[]) {
@@ -20,7 +20,7 @@ int main(int argc, char *argv[]) {
 	size_t size = 0;
 
 	while (getline(&line, &size, stdin) != -1) {
-		if (strncmp(argv[1], line, strlen(argv[1])) == 0) {
+		if (strncmp(line, argv[1], strlen(line) - 1) == 0) {
 			success = true;
 			printf("%s", line);
 		}
