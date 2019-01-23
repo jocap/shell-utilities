@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# (add font in font-folder to ~/.config/fontconfig/fonts.conf)
+
+fontconfig=~/.config/fontconfig/fonts.conf
+
+[ $# -ne 1 ] && echo "usage: $0 font-folder" 1>&2 && return 1
+[ ! -d "$1" ] && echo "$1 is not a directory" 1>&2 && return 1
+[ ! -e "$fontconfig" ] && echo "$fontconfig does not exist" 1>&2 && return 1
+
+for file in "$1"/*.pcf "$1"/*.pcf.gz "$1"/*.bdf; do
+	break # select first best file
+done
+
+family=$(fontforge -lang=ff -c 'Open("'"$file"'"); Print($familyname)' 2>/dev/null)
+
+sed -i '/ACCEPTED FONTS/a\
+	<acceptfont><pattern><patelt name="family"><string>'"$family"'</string></patelt></pattern></acceptfont>
+' "$fontconfig"
