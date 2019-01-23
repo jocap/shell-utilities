@@ -1,2 +1,2 @@
 %: %.c
-	gcc -Wall -Werror $@.c -o $@
+	gcc -Wall -Wno-missing-braces -Wextra -Wpedantic $@.c -o out/$@
