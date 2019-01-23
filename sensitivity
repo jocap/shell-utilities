@@ -1,0 +1,14 @@
+#!/bin/sh
+
+if [ $# -ne 1 ]; then
+	cat <<END > /dev/stderr
+usage $0 number
+END
+	return 1
+fi
+
+id=$(xinput list | grep /dev/wsmouse | awk '{print $4'} | sed 's/id=//')
+prop=$(xinput list-props $id \
+	| grep 'Constant Deceleration' \
+	| sed -e 's/.*(//' -e 's/).*//')
+xinput set-prop $id $prop $(echo "1.0 / $1" | bc -l)
