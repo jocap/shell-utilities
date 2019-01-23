@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# download and ...
+
+target=$(basename "$1")
+wget -O "$target" "$1"
+shift 1
+eval $@ "$target" && rm "$target"
