@@ -4,16 +4,20 @@
 
 fontconfig=~/.config/fontconfig/fonts.conf
 
-[ $# -ne 1 ] && echo "usage: $0 font-folder" 1>&2 && return 1
-[ ! -d "$1" ] && echo "$1 is not a directory" 1>&2 && return 1
-[ ! -e "$fontconfig" ] && echo "$fontconfig does not exist" 1>&2 && return 1
+[ $# -ne 1 ] && echo "usage: $0 font-folder" 1>&2 && exit 1
+[ ! -d "$1" ] && echo "$1 is not a directory" 1>&2 && exit 1
+[ ! -e "$fontconfig" ] && echo "$fontconfig does not exist" 1>&2 && exit 1
 
-for file in "$1"/*.pcf "$1"/*.pcf.gz "$1"/*.bdf; do
+for file in $(find "$1" \( -name '*.pcf' -o -name '*.pcf.gz' -o -name '*.bdf' \)); do
+	[ ! -e "$file" ] && echo "no font file found" 1>&2 && exit 1
 	break # select first best file
 done
 
 family=$(fontforge -lang=ff -c 'Open("'"$file"'"); Print($familyname)' 2>/dev/null)
+line='	<acceptfont><pattern><patelt name="family"><string>'"$family"'</string></patelt></pattern></acceptfont>'
+
+fgrep "$line" "$fontconfig" 1>&- && echo "$family already in fontconfig" 1>&2 && exit 1
 
 sed -i '/ACCEPTED FONTS/a\
-	<acceptfont><pattern><patelt name="family"><string>'"$family"'</string></patelt></pattern></acceptfont>
+'"$line"'
 ' "$fontconfig"
