@@ -1,0 +1,11 @@
+#!/bin/ksh
+
+# wrap file $1 in a directory $1
+
+ext=$RANDOM
+while [ -e "${1}.${ext}" ]; do ext=$RANDOM; done
+
+mv "$1" "${1}.${ext}"
+mkdir "$1"
+mv "${1}.${ext}" "$1"
+mv "${1}/${1}.${ext}" "${1}/${1}"

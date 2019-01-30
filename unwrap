@@ -1,0 +1,20 @@
+#!/bin/ksh
+
+# unwrap file $1/$1 to $1 and delete directory $1
+
+if [ "$(ls "$1" | wc -l)" -ne 1 ]; then
+	echo "$1 contains more than one file" 1>&2
+	exit 1
+fi
+
+if [ ! -e "${1}/${1}" -a ! -d "${1}/${1}" ]; then
+	echo "${1}/${1} does not exist" 1>&2
+	exit 1
+fi
+
+ext=$RANDOM
+while [ -e "${1}.${ext}" ]; do ext=$RANDOM; done
+
+mv "$1" "${1}.${ext}"
+mv "${1}.${ext}/${1}" "$1"
+rm -r "${1}.${ext}"
