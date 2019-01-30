@@ -33,10 +33,14 @@ int main(int argc, char *argv[]) {
 
 	while((len = getline(&line, &size, stdin)) != -1) {
 		if (i >= start && i <= end) fwrite(line, len, 1, stdout);
+		if (i == end) goto exit;
 		i++;
 	}
 
 	free(line);
 	if (ferror(stdin))
 		err(1, "getline");
+
+exit:
+	return 0;
 }
