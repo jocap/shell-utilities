@@ -7,7 +7,7 @@ END
 	return 1
 fi
 
-id=$(xinput list | grep /dev/wsmouse | awk '{print $4'} | sed 's/id=//')
+id=$(xinput list | grep /dev/wsmouse0 | awk '{print $4'} | sed 's/id=//')
 prop=$(xinput list-props $id \
 	| grep 'Constant Deceleration' \
 	| sed -e 's/.*(//' -e 's/).*//')
