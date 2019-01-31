@@ -1,3 +1,0 @@
-#!/bin/sh
-
-xdotool mousemove --window $(bspc query -N -n) --polar 0 0
