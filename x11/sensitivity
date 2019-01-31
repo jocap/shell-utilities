@@ -6,4 +6,4 @@ id=$(xinput list | grep /dev/wsmouse0 | awk '{print $4}' | sed 's/id=//')
 prop=$(xinput list-props $id \
 	| grep 'Constant Deceleration' \
 	| sed -e 's/.*(//' -e 's/).*//')
-xinput set-prop $id $prop $(echo "1.0 / $1" | bc -l)
+xinput set-prop $id $prop $(echo "1 / $1" | bc -l)
