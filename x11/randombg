@@ -1,0 +1,3 @@
+#!/bin/sh
+
+cat ~/.bg | sort -R | head -1 | sh

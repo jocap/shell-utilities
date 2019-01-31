@@ -1,0 +1,28 @@
+#!/bin/ksh
+
+tile='feh --bg-tile %F'
+fill='feh --bg-fill %F'
+savetile="$tile && echo feh --bg-tile \$(esc %F) >> ~/.bg"
+savefill="$fill && echo feh --bg-fill \$(esc %F) >> ~/.bg"
+
+while getopts se option; do
+	case $option in
+		(e) # echo filename
+			tile="$tile && echo %F"
+			fill="$fill && echo %F"
+			savetile="$savetile && echo %F"
+			savefill="$savefill && echo %F"
+			;;
+		(*)
+			exit 1
+			;;
+	esac
+done
+
+find "$PWD" -maxdepth 1 -type f \
+| feh --zoom fill --action1 ";$tile" \
+                  --action2 ";$fill" \
+                  --action3 ";$savetile" \
+                  --action4 ";$savefill" \
+                  -f -
+
