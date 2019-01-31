@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# usage: broken [path]
+# (find broken symlinks in path)
+
+find "${1:-.}" -type l ! -exec test -e {} \; -print
