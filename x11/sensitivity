@@ -2,7 +2,7 @@
 
 [ $# -ne 1 ] && echo "usage $0 number" 1>&2 && exit 1
 
-id=$(xinput list | grep /dev/wsmouse0 | awk '{print $4'} | sed 's/id=//')
+id=$(xinput list | grep /dev/wsmouse0 | awk '{print $4}' | sed 's/id=//')
 prop=$(xinput list-props $id \
 	| grep 'Constant Deceleration' \
 	| sed -e 's/.*(//' -e 's/).*//')
