@@ -1,3 +1,4 @@
 #!/bin/sh
 m=$(apm -m)
+[ "$m" = unknown ] && echo '?' 1>&2 && exit 1
 echo $((m/60))h:$((m%60))m
