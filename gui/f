@@ -1,0 +1,3 @@
+#!/bin/sh
+
+urxvt -name fff -e fff && pointerfollow
