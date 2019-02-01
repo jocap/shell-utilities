@@ -1,3 +1,0 @@
-#!/bin/sh
-
-while read line; do sed -e 's/^[ 	]*//' -e 's/[ 	]*$//'; done
