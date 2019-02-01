@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <err.h>
+
+/* note to user: beware of format string exploit */
 
 int main(int argc, char *argv[]) {
 	if (argc != 2) {
@@ -15,6 +18,7 @@ int main(int argc, char *argv[]) {
 	ssize_t len;
 
 	while((len = getline(&line, &size, stdin)) != -1) {
+		line[strlen(line) - 1] = '\0'; /* remove newline */
 		char x[size];
 		n = sscanf(line, argv[1], x);
 		if (n == 1) printf("%s\n", x);
