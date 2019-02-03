@@ -1,0 +1,15 @@
+#!/bin/ksh
+
+i=0
+set -A names -- black red green yellow dark blue magenta cyan gray
+
+while ((i <= 7)); do
+	tput sgr0
+	tput setaf $i
+	printf "%s\t(%d)\t" ${names[$i]} $i
+	tput bold
+	printf "%s\t(%d)\n" ${names[$i]} $((i + 8))
+	((i++))
+done | column -ts '	'
+
+tput sgr0
