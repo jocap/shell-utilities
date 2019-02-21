@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# pass stdin as file to command
+
+file=$(mktemp)
+cat > "$file"
+
+[ $# -gt 0 ] && "$@" "$file"
