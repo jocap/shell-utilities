@@ -1,0 +1,39 @@
+#!/bin/sh
+
+default_path=/usr/local/share/applications
+
+usage() {
+	echo "usage: $0 [-f] desktop-entry" 1>&2
+}
+
+[ $# -lt 1 -o $# -gt 2 ] && usage && exit 1
+
+fake=false
+if [ $# -eq 2 ]; then
+	opt=$1
+	file=$2
+	case "$opt" in
+		-f) fake=true ;;
+		*) usage && exit 1 ;;
+	esac
+else
+	file=$1
+fi
+
+while [ ! -e "$file" ]; do
+	if [ "$(basename "$file")" = "$file" ]; then # relative path
+		file=$default_path/$file
+	else # absolute path
+		echo "$file does not exist" 1>&2 && exit 1
+	fi
+done
+
+mime_types=$(cat "$file" | grep ^MimeType= | sed 's/^MimeType=//')
+
+IFS=';'
+for mime_type in $mime_types; do
+	echo xdg-mime default "$(basename "$file")" $mime_type
+	if [ "$fake" = false ]; then
+		xdg-mime default "$(basename "$file")" $mime_type
+	fi
+done
