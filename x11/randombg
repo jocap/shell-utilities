@@ -1,4 +1,6 @@
 #!/bin/sh
 
 [ ! -e /home/john/.bg ] && exit 1
-cat ~/.bg | sort -R | head -1 | sh
+
+bg=$(tail -1 ~/.fehbg | trim) # current
+sort -R ~/.bg | fgrep -v "$bg" | head -1 | sh
