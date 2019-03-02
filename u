@@ -1,0 +1,7 @@
+#!/bin/sh
+
+if xprop -id $(pfw) WM_CLASS | fgrep '= "urxvt"' 1>&-; then
+	urxvt -cd "$(xtitle)" &
+else
+	urxvt &
+fi
