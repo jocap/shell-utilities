@@ -1,0 +1,6 @@
+#!/bin/sh
+
+x=$@
+while read line; do
+	printf '%s%s\n' "$line" "$x"
+done
