@@ -1,0 +1,14 @@
+#!/usr/bin/env perl
+# vi: ft=perl
+
+# trim both sides of each line of whitespace
+# (but add a newline after each line if missing)
+
+use v5.24;
+use warnings;
+use strict;
+
+while (<>) {
+	s/^\s+|\s+$//;
+	say;
+}
