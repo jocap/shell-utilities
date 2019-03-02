@@ -2,10 +2,10 @@
 
 # wrap file $1 in a directory $1
 
-ext=$RANDOM
-while [ -e "${1}.${ext}" ]; do ext=$RANDOM; done
+prefix=$RANDOM
+while [ -e "${prefix}.${1}" ]; do prefix=$RANDOM; done
 
-mv "$1" "${1}.${ext}"
+mv "$1" "${prefix}.${1}"
 mkdir "$1"
-mv "${1}.${ext}" "$1"
-mv "${1}/${1}.${ext}" "${1}/${1}"
+mv "${prefix}.${1}" "$1"
+mv "${1}/${prefix}.${1}" "${1}/${1}"

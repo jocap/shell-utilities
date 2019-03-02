@@ -12,9 +12,9 @@ if [ ! -e "${1}/${1}" -a ! -d "${1}/${1}" ]; then
 	exit 1
 fi
 
-ext=$RANDOM
-while [ -e "${1}.${ext}" ]; do ext=$RANDOM; done
+prefix=$RANDOM
+while [ -e "${prefix}.${1}" ]; do prefix=$RANDOM; done
 
-mv "$1" "${1}.${ext}"
-mv "${1}.${ext}/${1}" "$1"
-rm -r "${1}.${ext}"
+mv "$1" "${prefix}.${1}"
+mv "${prefix}.${1}/${1}" "$1"
+rm -r "${prefix}.${1}"
