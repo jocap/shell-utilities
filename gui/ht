@@ -1,3 +1,0 @@
-#!/bin/sh
-
-urxvt -name htop -g 70x8 -e htop && pointerfollow
