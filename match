@@ -1,0 +1,64 @@
+#!/bin/ksh
+
+# match globs files using make-like % matching.
+# (escape % with '\%')
+
+err() { echo "$@" 1>&2; exit 1; }
+pass() { printf '%s\n' "$1"; }
+
+[[ $# -ne 1 && $# -ne 2 ]] && err "usage: $0 pattern [new-pattern]"
+
+# validate patterns
+
+percent_signs() {
+	percents=$(pass "$1" | sed -e 's/\\%//g' -e 's/[^%]//g')
+	pass ${#percents}
+}
+
+[[ $(percent_signs "$1") -gt 1 ]] && err "more than a single % in first pattern"
+[[ $(percent_signs "$1") -eq 0 ]] && err "missing % in first pattern"
+
+if [[ $# -eq 2 ]]; then
+	[[ $(percent_signs "$2") -gt 1 ]] && err "more than a single % in second pattern"
+	[[ $(percent_signs "$2") -eq 0 ]] && err "missing % in second pattern"
+fi
+
+# find prefixes and suffixes (parts before and after %)
+
+prefix() {
+	pass "$1" | sed -e 's/^%$//' -e 's/^%.*//' -e 's/\([^\\]\)%.*$/\1/' -e 's/\\%/%/g'
+}
+suffix() {
+	pass "$1" | sed -e 's/^%$//' -e 's/.*[^\\]%\(.*\)/\1/' -e 's/^%//' -e 's/\\%/%/g'
+}
+
+old_prefix=$(prefix "$1")
+old_suffix=$(suffix "$1")
+
+if [[ $# -eq 2 ]]; then
+	new_prefix=$(prefix "$2")
+	new_suffix=$(suffix "$2")
+fi
+
+# replace % with *
+
+glob=$(pass "$1" | sed -e 's/\*/\\*/g' -e 's/\([^\\]\)%/\1*/' -e 's/^%/*/' -e 's/\\%/%/g')
+
+# use glob to find and move files
+
+for old in $glob; do
+	[[ ! -e $old && ! -d $old ]] && err 'no matching files'
+
+	pass "$old"
+
+	if [[ $# -eq 2 ]]; then
+		# retrieve part matched by % (actually *)
+		globbed=${old##$old_prefix}
+		globbed=${globbed%%$old_suffix}
+
+		# create new filename and move file
+		new=$new_prefix$globbed$new_suffix
+
+		pass "$new"
+	fi
+done
