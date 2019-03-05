@@ -1,0 +1,8 @@
+#!/bin/sh
+
+[[ $# -ne 2 ]] && { echo "usage: $0 old-pattern new-pattern" 1>&2; exit 1; }
+
+match "$@" | while read a && read b; do
+	echo "$a -> $b"
+	mv "$a" "$b"
+done
