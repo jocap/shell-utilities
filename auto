@@ -1,0 +1,30 @@
+#!/bin/sh
+
+# automatically clear screen and run command when file changes
+
+# auto mandoc repl.1 \| ul     (watches repl.1)
+# auto wc -l repl.c \> lines   (watches repl.c)
+
+eval file=\$$#
+
+# locate file in argv (preceding any of sh's infix operators)
+
+i=
+for arg in "$@"; do
+	case "$arg" in
+	'|'|'>'|'>>'|'<'|'&'|'&&'|'||')
+		eval file=\$$i
+		break
+		;;
+	esac
+	: $((i++))
+done
+
+# run command
+
+if [ "$1" = '-c' ]; then # enable screen clearing
+	shift 1
+	watch "$file" | while read; do clear && eval "$@"; done
+else
+	watch "$file" | while read; do eval "$@"; done
+fi
