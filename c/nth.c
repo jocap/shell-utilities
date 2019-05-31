@@ -4,8 +4,6 @@
 #include <string.h>
 #include <err.h>
 
-#define not !
-
 int main(int argc, char *argv[]) {
 	int start, end;
 	bool no_end;
