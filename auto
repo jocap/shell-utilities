@@ -1,13 +1,30 @@
 #!/bin/sh
 
-# automatically clear screen and run command when file changes
+# auto: automatically clear screen and run command when file changes
 
 # auto mandoc repl.1 \| ul     (watches repl.1)
 # auto wc -l repl.c \> lines   (watches repl.c)
 
-eval file=\$$#
+# parse arguments
+
+clear=0
+wargs= # args for watch
+
+args=`getopt ci $*`
+[ $? -ne 0 ] && { echo "usage: $0 [-ci] command ..." 1>&2; exit 1; }
+set -- $args
+
+while [ $# -ne 0 ]; do
+	case "$1" in
+	-c) clear=1; shift ;;
+	-i) wargs=-i; shift ;;
+	--) shift; break;;
+	esac
+done
 
 # locate file in argv (preceding any of sh's infix operators)
+
+eval file=\$$#
 
 i=
 for arg in "$@"; do
@@ -22,9 +39,8 @@ done
 
 # run command
 
-if [ "$1" = '-c' ]; then # enable screen clearing
-	shift 1
-	watch "$file" | while read; do clear && eval "$@"; done
+if [ $clear = 1 ]; then
+	watch $wargs "$file" | while read; do clear && eval "$@"; done
 else
-	watch "$file" | while read; do eval "$@"; done
+	watch $wargs "$file" | while read; do clear && eval "$@"; done
 fi
