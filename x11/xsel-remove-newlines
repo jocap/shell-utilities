@@ -1,0 +1,9 @@
+#!/bin/sh
+
+xsel -ob |
+# remove leading tabs:
+sed 's/^	*//' |
+while read line; do
+	printf '%s' "$line"
+done |
+xsel -ib

@@ -1,3 +1,5 @@
 #!/bin/sh
 
+[ $# -ne 1 ] && { echo "usage: $0 argument" 1>&2; exit 1; }
+
 awk "{print $@}"

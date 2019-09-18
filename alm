@@ -1,0 +1,57 @@
+#!/bin/ksh
+
+# almanack
+
+# Month and year
+
+date '+%B %Y'
+
+# Names of weekdays
+
+tput setaf 7 # gray
+printf 'Mo Tu We Th Fr Sa Su\n'
+tput sgr0
+
+# Days
+
+Mon=0
+Tue=1
+Wed=2
+Thu=3
+Fri=4
+Sat=5
+Sun=6
+
+set -A week1 -- 0 0 0 0 0 0 0
+set -A week2 -- 0 0 0 0 0 0 0
+set -A week3 -- 0 0 0 0 0 0 0
+set -A week4 -- 0 0 0 0 0 0 0
+set -A week5 -- 0 0 0 0 0 0 0
+set -A week6 -- 0 0 0 0 0 0 0
+
+format=$(date +%Y%m%%s0000)
+current_month=$(date +%m)
+current_day=$(date +%d)
+max_days=$(cal | xargs | awk '{print $NF}')
+
+index=0
+number=1
+for day in $(jot -w %02d $max_days); do
+	# insert into week arrays
+	[[ $index -eq 6 ]] && number=$((number + 1))
+	index=$(eval echo \$$(date -j $(printf $format $day) +%a))
+	eval week$number[$index]=$day
+done
+
+for n in 1 2 3 4 5 6; do
+	for day in $(eval echo \${week$n[@]}); do
+		if [[ "$day" = 0 ]]; then
+			printf '   '
+		else
+			[[ "$day" = "$current_day" ]] && (tput setaf 3; tput bold)
+			printf '%s ' $day
+			[[ "$day" = "$current_day" ]] && tput sgr0
+		fi
+	done
+	printf '\n'
+done

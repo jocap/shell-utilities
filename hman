@@ -6,5 +6,5 @@
 file=$(mktemp /tmp/man.XXXXXX) || exit 1
 mv $file $file.html
 MANPAGER=cat man -T html "$@" > $file.html
-xdg-open $file.html
+"$BROWSER" $file.html
 rm $file.html

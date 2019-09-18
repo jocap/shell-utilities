@@ -1,0 +1,11 @@
+#!/bin/sh
+
+xtitle | while read title; do
+	if [[ -d $title ]]; then
+		printf %s\\n "$title"
+	elif [[ -e $title ]]; then
+		printf %s\\n "$(dirname "$title")"
+	else
+		printf %s\\n "$HOME"
+	fi
+done

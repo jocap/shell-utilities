@@ -2,5 +2,7 @@
 
 [ $# -lt 1 ] && { echo "usage: $0 command ..." 1>&2; exit 1; }
 
-"$@" > /tmp/less-view
-[ -e /tmp/less-pid ] && kill -HUP $(cat /tmp/less-pid)
+mkdir -p /tmp/less$PWD
+
+"$@" > /tmp/less$PWD/view
+[ -e /tmp/less$PWD/pid ] && kill -HUP $(cat /tmp/less$PWD/pid) 2> /dev/null

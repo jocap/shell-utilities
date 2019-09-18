@@ -1,9 +1,12 @@
-#!/bin/sh
+#!/bin/ksh
 
-default_path=/usr/local/share/applications
+set -A paths -- /usr/local/share/applications ~/.local/share/applications
 
 usage() {
 	echo "usage: $0 [-f] desktop-entry" 1>&2
+}
+err_no_file() {
+	echo "$file does not exist" 1>&2 && exit 1
 }
 
 [ $# -lt 1 -o $# -gt 2 ] && usage && exit 1
@@ -20,13 +23,17 @@ else
 	file=$1
 fi
 
-while [ ! -e "$file" ]; do
-	if [ "$(basename "$file")" = "$file" ]; then # relative path
-		file=$default_path/$file
-	else # absolute path
-		echo "$file does not exist" 1>&2 && exit 1
-	fi
-done
+basename=$(basename "$file")
+
+if [[ $basename != $file ]]; then # absolute path
+	[[ ! -e $file ]] && err_no_file
+else # relative path
+	i=0
+	while [[ ! -e $file ]]; do
+		[[ $i -gt ${#paths[@]} ]] && err_no_file
+		file=${paths[$((i++))]}/$basename
+	done
+fi
 
 mime_types=$(cat "$file" | grep ^MimeType= | sed 's/^MimeType=//')
 

@@ -1,7 +1,11 @@
 #!/bin/sh
 
-[ $# -lt 1 ] && { echo "usage: $0 command ..." 1>&2; exit 1; }
+err() { echo "$@" 1>&2; exit 1; }
 
-echo $$ > /tmp/less-pid
-"$@" > /tmp/less-view
-exec less /tmp/less-view
+[ $# -ne 0 ] && err "usage: $0"
+
+[ ! -d /tmp/less$PWD ] && err "/tmp/less$PWD does not exist (have you run less-refresh?)"
+mkdir -p /tmp/less$PWD
+
+echo $$ > /tmp/less$PWD/pid
+exec less /tmp/less$PWD/view

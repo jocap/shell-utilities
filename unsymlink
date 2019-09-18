@@ -1,0 +1,20 @@
+#!/bin/sh
+
+# convert a symlink to a copy
+
+if test $# -eq 0; then
+	echo "usage: $0 symlinks ..." 1>&2
+	exit 1
+fi
+
+for symlink in "$@"; do
+	r=`readlink -f "$symlink"`
+	if test "$r" = "$symlink"; then
+		echo "$symlink is not a symlink" 1>&2
+		exit 1
+	fi
+	echo rm "$symlink"
+	rm "$symlink"
+	echo cp "$r" "$symlink"
+	cp "$r" "$symlink"
+done

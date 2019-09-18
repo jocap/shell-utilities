@@ -1,1 +1,3 @@
+#!/bin/sh
+
 xsel -ob | sed 's/^/    /' | xsel -ib

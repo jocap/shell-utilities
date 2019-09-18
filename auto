@@ -42,5 +42,5 @@ done
 if [ $clear = 1 ]; then
 	watch $wargs "$file" | while read; do clear && eval "$@"; done
 else
-	watch $wargs "$file" | while read; do clear && eval "$@"; done
+	watch $wargs "$file" | while read; do eval "$@"; done
 fi

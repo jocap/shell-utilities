@@ -1,0 +1,5 @@
+#!/bin/sh
+
+eval f=\$$#
+printf %b "\033]0;$(readlink -f $f)\a"
+nvi "$@"

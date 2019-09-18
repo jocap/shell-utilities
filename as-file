@@ -2,7 +2,30 @@
 
 # pass stdin as file to command
 
+usage() { echo "usage $0: [-e ext] command ..." 1>&2; exit 1; }
+
+[ $# -eq 0 ] && usage
+
+ext=
+case "$1" in
+-e)
+	shift
+	ext=.$1
+	shift ;;
+--)
+	shift ;;
+-*)
+	usage ;;
+esac
+
 file=$(mktemp)
+mv "$file" "$file$ext"
+file=$file$ext
+
 cat > "$file"
 
-[ $# -gt 0 ] && "$@" "$file"
+if [ $# -gt 0 ]; then
+	"$@" "$file"
+else
+	usage
+fi

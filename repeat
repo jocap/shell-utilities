@@ -1,0 +1,27 @@
+#!/bin/sh
+
+if [ $# -lt 2 ]; then
+	echo "usage: $0 [-n] times words ..." 1>&2
+	echo "(-n disables newline separator)" 1>&2
+	exit 1
+fi
+
+final() { echo "$@"; }
+
+if [ $1 = -n ]; then
+	shift 1
+	say() { echo -n "$@ "; }
+else
+	say() { echo "$@"; }
+fi
+
+times=$1
+shift 1
+[ 0 -ge "$times" ] && exit 0
+
+i=1
+while [ $i -lt "$times" ]; do
+	say "$@"
+	: $((i++))
+done
+final "$@"

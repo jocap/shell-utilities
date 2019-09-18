@@ -1,0 +1,9 @@
+#!/bin/sh
+
+command="echo"
+
+for var in "$@"; do
+	command="$command \$$var"
+done
+
+eval "$command"
